@@ -2,12 +2,18 @@
 
 ## Update
 2023.7(v4.0)
-* 结合U型结构网络进行精准的分割，可以直接分割出漏液情况。
+* 结合U型结构网络进行精准的分割，可以直接分割出漏液情况，mIou可达80%以上。
 * 设计UELIE图像增强方法，可以针对弱光、过曝两种现象分别进行前处理。
 * 设计MFFM多尺度特征融合方法，更好地融合深层、浅层的特征信息。
 * 数据集扩充至606张。
 * 最好的效果FPS可达40（4060笔记本端）
+* Combined with the U-shaped network for accurate division, the leak situation can be directly segmented, and mIoU can reach more than 80%.
+* Design the UELIE image enhancement method, which can be processed separately for the two phenomena of weak light and overtime.
+* Design MFFM multi-scale feature fusion methods to better integrate deep and shallow feature information.
+* Data sets expand to 606.
+* The best effect FPS can reach 40 (4060 notebook)
 
+  
 2023.4 （v3.0）
 * 提高ROI连接处精准性，数据集数量翻10倍！
 * 提高ROI连接处判断AP至99%，提高模型鲁棒性。
@@ -25,12 +31,12 @@
 
 ## How to Use
 For v4.0
-* 训练方法
+* 训练方法（train method）
   * python [train_UELIE_MulFuse_SPSM.py](train_UELIE_MulFuse_SPSM.py)
-* 推理方法
+* 推理方法（inference methods）
   * python [get_miou(UELIE+MFFM+SSAM).py](get_miou%28UELIE%2BMFFM%2BSSAM%29.py)
   * python [predict(UELIE+MFFM+SSAM).py](predict%28UELIE%2BMFFM%2BSSAM%29.py)
-  * 权重下载：链接：https://pan.baidu.com/s/1HxKhm0EWulqUiCli6tI5hw?pwd=li1n 
+  * 权重下载（download weights）：链接：https://pan.baidu.com/s/1HxKhm0EWulqUiCli6tI5hw?pwd=li1n 
 
 
 For v3.1
@@ -58,8 +64,13 @@ For v3.0
 * 点击停止检测，并关闭cmd
 
 
+## Note
+* v4.0 代码、权重、生成图、复现方法开源
+* 因数据集未拿到品牌方授权，因此数据集暂不开源，联系作者：510698367@qq.com
+* v4.0 code, weights, generating images, and reproduction methods are open source.
+* Because the datasets is not authorized by the brand, the datasets is not open for the time being, contact the author: 510698367@qq.com
+  
 ## 注意
-* v4.0 开源
 * v3 联系510698367@qq.com
 * v3常见问题汇总：
   * Q: 点击摄像头后，卡顿一会儿提示“出错！错误发生在视频读取”？
@@ -81,6 +92,8 @@ For v3.0
   * Q: 点击连接数据库按钮后，提示“由于目标计算机积极拒绝，无法连接” ?
     * A: 该问题是因为 Redis 服务未安装或未启动。请确保该电脑已经安装步骤
 一的 msi 文件。如果仍然出现此问题，请打开系统服务 – Redis - 启动该服务。
+
+
 
 
 
