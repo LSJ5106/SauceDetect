@@ -9,38 +9,12 @@ import torch.nn.functional as F
 # from nets.CBAM import CBAMBlock
 # from nets.multiscale_fuse import fusion_tensors
 from cv_attention.SequentialSelfAttention import module_1, module_2, module_3, module_4
-from nets.multiscale_fuse import fusion_tensors
+from nets.multiscale_fuse import AF_FPN_fusion
 # from nets.depth_separable_conv import dp_conv
-import matplotlib.pyplot as plt
-import numpy as np
-import cv2
+
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # device = torch.device('cpu')
-
-# 热力图
-def draw_features(width, height, x, savename="{}/f1_conv1.png".format("feature")):
-    fig = plt.figure(figsize=(16, 16))
-    fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95, wspace=0.05, hspace=0.05)
-    for i in range(width * height):
-        #8*8网格
-        plt.subplot(height, width, i + 1)
-        plt.axis('off')
-        img = x[0, i, :, :]
-        pmin = np.min(img)
-        pmax = np.max(img)
-        img = ((img - pmin) / (pmax - pmin + 0.000001)) * 255  # float在[0，1]之间，转换成0-255
-        img = img.astype(np.uint8)  # 转成unit8
-        #函数applycolormap产生伪彩色图像
-        #COLORMAP_JET模式，就常被用于生成我们所常见的 热力图
-        img = cv2.applyColorMap(img, cv2.COLORMAP_JET)  # 生成heat map
-        img = img[:, :, ::-1]  # 注意cv2（BGR）和matplotlib(RGB)通道是相反的
-        plt.imshow(img)
-        print("{}/{}".format(i, width * height))
-    fig.savefig(savename, dpi=100)
-    fig.clf()
-    plt.close()
-
 
 class Attention_block(nn.Module):
     def __init__(self, F_g, F_l, F_int):
@@ -203,47 +177,6 @@ class Unet(nn.Module):
             [feat1, feat2, feat3, feat4, feat5] = self.vgg.forward(inputs)
 
 
-        # elif self.backbone == "edgenext_xx_small":
-        #     all_feature_extractor = self.vgg
-        #     # all_feature_extractor = timm.create_model('resnet34', features_only=True)
-        #
-        #     all_features = all_feature_extractor(inputs)
-        #
-        #     # 在这里就对feature 4 denseblock，直接用没处理过的feature 3，减少信息丢失
-        #     upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True).to(device)
-        #     feature_4 = upsample(all_features[3])
-        #
-        #     denseblock = DenseBlock(168, 512)
-        #     feature_4 = denseblock(feature_4)
-        #
-        #     all_features.append(feature_4)
-        #
-        #     upsample = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True).to(device)
-        #
-        #     # print("\n\n")
-        #     # 原始  feature 3 shape: torch.Size([2, 168, 16, 16])
-        #     # 调整后feature 3 shape: torch.Size([2, 512, 64, 64])
-        #     # feature 4 不参与
-        #     for i in range(len(all_features) - 1):
-        #         print('feature {} shape: {}'.format(i, all_features[i].shape))
-        #
-        #         if i == 0:
-        #             conv = nn.Conv2d(24, 64, kernel_size=1).to(device)
-        #         elif i == 1:
-        #             conv = nn.Conv2d(48, 128, kernel_size=1).to(device)
-        #         elif i == 2:
-        #             conv = nn.Conv2d(88, 256, kernel_size=1).to(device)
-        #         elif i == 3:
-        #             conv = nn.Conv2d(168, 512, kernel_size=1).to(device)
-        #         all_features[i] = conv(all_features[i])
-        #         all_features[i] = upsample(all_features[i])
-        #
-        #     #  print('feature {} shape: {}'.format(i, all_features[i].shape))
-        #
-        #     # upsample = nn.Upsample(scale_factor=0.5, mode='bilinear', align_corners=True).to(device)
-        #     # all_features.append(upsample(all_features[3]))
-        #     print('feature {} shape: {}'.format(4, all_features[4].shape))
-        #     [feat1, feat2, feat3, feat4, feat5] = all_features
 
         elif self.backbone == "edgenext" or self.backbone == "edgenext_xx_small_nodense_ELU":
             all_feature_extractor = self.vgg
@@ -289,7 +222,7 @@ class Unet(nn.Module):
                 # print('feature {} shape: {}'.format(i, all_features[i].shape))
 
             # upsample = nn.Upsample(scale_factor=0.5, mode='bilinear', align_corners=True).to(device)
-            feature_5 = fusion_tensors(all_features[0], all_features[1], all_features[2], all_features[3])
+            feature_5 = AF_FPN_fusion(all_features[0], all_features[1], all_features[2], all_features[3])
             all_features.append(feature_5)
             # 将feature1-4融合成feature5
             # fuse_feature = fusion_tensors(*all_features[:4])
@@ -300,47 +233,22 @@ class Unet(nn.Module):
 
         # 加注意力机制
         up4 = self.up_concat4(feat4, feat5)
-        up4 = module_4(up4)
+        # up4 = module_4(up4)
         # up4 torch.Size([2,512,64,64])
         up3 = self.up_concat3(feat3, up4)
-        up3 = module_3(up3)
+        # up3 = module_3(up3)
         # up3 torch.Size([2,256,128,128])
         up2 = self.up_concat2(feat2, up3)
-        up2 = module_2(up2)
+        # up2 = module_2(up2)
         # up2 torch.Size([2,128,256,256])
         up1 = self.up_concat1(feat1, up2)
-        up1 = module_1(up1)
+        # up1 = module_1(up1)
         # up1 torch.Size([2,64,512,512])
 
         if self.up_conv != None:
             up1 = self.up_conv(up1)
 
         final = self.final(up1)
-
-        # # 绘制热力图
-        # heatmap = final.detach().cpu().numpy()
-        # # heatmap: [1,2,128,512]
-        # heatmap = np.mean(heatmap, axis=0)  # axis=0,对各列求均值，返回1*n
-        #
-        # heatmap = np.maximum(heatmap, 0)
-        # heatmap /= np.max(heatmap)
-        #
-        # # 通过索引操作取出第一个维度上的数据，得到 [128, 512] 数组
-        # heatmap = heatmap[0]  # 或者 array_2d = array_3d[1]
-        #
-        # img = cv2.imread("enhanced_datasets/VOC2007/JPEGImages/110v_3000170.jpg")  # 用cv2加载原始图像
-        # # heatmap = cv2.resize(heatmap, (128,512))  # 将热力图的大小调整为与原始图像相同
-        # img = cv2.resize(img,(512,128))
-        # heatmap = np.uint8(255 * heatmap)  # 将热力图转换为RGB格式
-        # heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)  # 将热力图应用于原始图像
-        # superimposed_img = heatmap * 0.4 + img  # 这里的0.4是热力图强度因子
-        #
-        # # 将图像保存到硬盘
-        # cv2.imwrite("hot_result.png", superimposed_img)
-        #
-        # # 展示图像
-        # superimposed_img /= 255
-        # plt.imshow(superimposed_img)
 
         return final
 

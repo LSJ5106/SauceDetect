@@ -120,7 +120,7 @@ def LIME_api_single(input_path, filename, output_path):
         corrected_name = f"{name}_{method}_g{args.gamma}_l{args.lambda_}{ext}"
 
         save_path = os.path.join(output_path, filename)
-        print("Save to : ", save_path)
+        print("保存到: ", save_path)
         cv2.imwrite(save_path, enhanced_image)
 
 
