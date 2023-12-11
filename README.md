@@ -14,10 +14,10 @@
 ### Partial dataset
 See the datasets_clean folder for details:
 
-![110v_300010.jpg](..%2FSADM%BF%AA%D4%B4%B4%FA%C2%EBv4.0%2Fdatasets_clean%2F110v_300010.jpg)
+![110v_300010.jpg](..datasets_clean%2F110v_300010.jpg)
 
-![110v_300070.jpg](..%2FSADM%BF%AA%D4%B4%B4%FA%C2%EBv4.0%2Fdatasets_clean%2F110v_300070.jpg)
+![110v_300070.jpg](..datasets_clean%2F110v_300070.jpg)
 
-![110v_300080.jpg](..%2FSADM%BF%AA%D4%B4%B4%FA%C2%EBv4.0%2Fdatasets_clean%2F110v_300080.jpg)
+![110v_300080.jpg](..datasets_clean%2F110v_300080.jpg)
 
-![110v_300090.jpg](..%2FSADM%BF%AA%D4%B4%B4%FA%C2%EBv4.0%2Fdatasets_clean%2F110v_300090.jpg)
+![110v_300090.jpg](..%datasets_clean%2F110v_300090.jpg)
