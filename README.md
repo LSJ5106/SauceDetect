@@ -9,7 +9,7 @@
 ### PREDICT
   * python [get_miou(UELIE+MFFM+SSAM).py](get_miou%28UELIE%2BMFFM%2BSSAM%29.py)
   * python [predict(UELIE+MFFM+SSAM).py](predict%28UELIE%2BMFFM%2BSSAM%29.py)
-  * Weight Download：https://pan.baidu.com/s/1HxKhm0EWulqUiCli6tI5hw?pwd=li1n 
+  * Weight Download：https://pan.baidu.com/s/1dBGY31w4Kgh92JN0KA3TBw?pwd=jt1r
 
 ### Partial dataset
 See the datasets_clean folder for details:
