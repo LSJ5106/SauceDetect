@@ -33,13 +33,28 @@ if __name__ == "__main__":
     #   指向VOC数据集所在的文件夹
     #   默认指向根目录下的VOC数据集
     #-------------------------------------------------------#
-    VOCdevkit_path  = 'enhanced_datasets'
+    VOCdevkit_path  = 'datasets_UELIE'
 
     image_ids       = open(os.path.join(VOCdevkit_path, "VOC2007/ImageSets/Segmentation/test.txt"),'r').read().splitlines()
     gt_dir          = os.path.join(VOCdevkit_path, "VOC2007/SegmentationClass/")
     miou_out_path   = "miou_out"
     pred_dir        = os.path.join(miou_out_path, 'detection-results')
 
+    if miou_mode == 0 or miou_mode == 1:
+        if not os.path.exists(pred_dir):
+            os.makedirs(pred_dir)
+            
+        print("Load model.")
+        unet = Unet()
+        print("Load model done.")
+
+        print("Get predict result.")
+        for image_id in tqdm(image_ids):
+            image_path  = os.path.join(VOCdevkit_path, "VOC2007/JPEGImages/"+image_id+".jpg")
+            image       = Image.open(image_path)
+            image       = unet.get_miou_png(image)
+            image.save(os.path.join(pred_dir, image_id + ".png"))
+        print("Get predict result done.")
 
     if miou_mode == 0 or miou_mode == 2:
         print("Get miou.")

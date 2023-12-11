@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from PIL import Image
 from torch import nn
 
-from nets.unet_edgenext_mulFuse_SSAM import Unet as unet
+from nets.unet_edgenext_noAttention import Unet as unet
 from utils.utils import cvtColor, preprocess_input, resize_image, show_config
 
 
@@ -26,7 +26,7 @@ class Unet(object):
         #   训练好后logs文件夹下存在多个权值文件，选择验证集损失较低的即可。
         #   验证集损失较低不代表miou较高，仅代表该权值在验证集上泛化性能较好。
         #-------------------------------------------------------------------#
-        "model_path"    : 'logs_MFFM_UELIE_SSAM/ep1000-loss0.155-val_loss0.187.pth',
+        "model_path"    : 'logs_UELIE/best_epoch_weights.pth',
         #--------------------------------#
         #   所需要区分的类的个数+1
         #--------------------------------#
@@ -38,7 +38,7 @@ class Unet(object):
         #--------------------------------#
         #   输入图片的大小
         #--------------------------------#
-        "input_shape"   : [128, 512],
+        "input_shape"   : [512, 128],
         #-------------------------------------------------#
         #   mix_type参数用于控制检测结果的可视化方式
         #
@@ -199,7 +199,8 @@ class Unet(object):
             #   将新图片转换成Image的形式
             #------------------------------------------------#
             image = Image.fromarray(np.uint8(seg_img))
-        
+
+
         return image
 
     def get_FPS(self, image, test_interval):
@@ -357,7 +358,7 @@ class Unet(object):
             #         pr_colored[i, j] = color_map.get(class_idx, [0, 0, 0])
             #
             # colored_image = Image.fromarray(pr_colored)
-    
+
         image = Image.fromarray(np.uint8(pr))
         return image
 
@@ -378,7 +379,7 @@ class Unet_ONNX(object):
         #--------------------------------#
         #   输入图片的大小
         #--------------------------------#
-        "input_shape"   : [512, 512],
+        "input_shape"   : [128, 512],
         #-------------------------------------------------#
         #   mix_type参数用于控制检测结果的可视化方式
         #
