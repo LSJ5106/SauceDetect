@@ -14,10 +14,10 @@
 ### Partial dataset
 See the datasets_clean folder for details:
 
-![110v_300010.jpg](datasets_clean%2F110v_300010.jpg)width="100px"
+![110v_300010.jpg](datasets_clean%2Fshow1.jpg)
 
-![110v_300070.jpg](datasets_clean%2F110v_300070.jpg)
+![110v_300070.jpg](datasets_clean%2Fshow2.jpg)
 
-![110v_300080.jpg](datasets_clean%2F110v_300080.jpg)
+![110v_300080.jpg](datasets_clean%2Fshow3.jpg)
 
-![110v_300090.jpg](%datasets_clean%2F110v_300090.jpg)
+![110v_300090.jpg](%datasets_clean%2Fshow4.jpg)
