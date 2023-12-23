@@ -14,6 +14,6 @@
 ### Partial dataset
 See the datasets_clean folder for details:
 
-![Datasets.jpg](datasets_clean%2FDatasets.jpg)
+![Dataset_github.jpg](datasets_clean%2FDataset_github.jpg)
 
 
